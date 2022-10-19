@@ -11,11 +11,11 @@
  */
 class RightPyramid: public Figure {
 public:
-  RightPyramid(const int &n, const int &side, const int &height);
+  RightPyramid(const int &n, const int &radius, const int &height);
   std::vector<sf::Glsl::Vec4> vertexes() override;
 private:
   int n_;
-  int side_;
+  int radius_;
   int height_;
   std::vector<sf::Glsl::Vec3> vertexes_;
 };

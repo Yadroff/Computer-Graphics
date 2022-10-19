@@ -1,5 +1,5 @@
 #include "RightPyramid.h"
-RightPyramid::RightPyramid(const int &n, const int &side, const int &height) : n_(n), side_(side), height_(height) {
+RightPyramid::RightPyramid(const int &n, const int &radius, const int &height) : n_(n), radius_(radius), height_(height) {
   double alpha = 2 * M_PI / n;
   double x, y = 0, z = 0;
   for (int i = 0; i < n; ++i) {
@@ -18,7 +18,7 @@ std::vector<sf::Glsl::Vec4> RightPyramid::vertexes() {
   for (int i = 0; i < n_; ++i) {
 	x = vertexes_[i].x;
 	z = vertexes_[i].z;
-	ans[i] = {static_cast<float>(side_) * x, 0, static_cast<float>(side_) * z, 0};
+	ans[i] = {static_cast<float>(radius_) * x, 0, static_cast<float>(radius_) * z, 0};
   }
   ans[n_] = {0, static_cast<float>(height_), 0, 0};
   return ans;

@@ -4,16 +4,23 @@
 #include "Figure.h"
 
 using namespace sf::Glsl;
-class RightTruncatedPyramid: public Figure {
+
+class RightTruncatedPyramid : public Figure {
 public:
     RightTruncatedPyramid(const int &n, const int &radiusDown, const int &radiusUp, const int &h);
-    std::vector<sf::Glsl::Vec4> vertexes() override;
+
+    std::vector<Polygon> polygons() override;
+
 private:
     int n_;
     int radiusDown_;
     int radiusUp_;
-    int h_;
+    int height_;
     std::vector<Vec3> vertexes_;
+
+    void copyVecDown(const Vec3 &vert, Vec3 &ans) const;
+
+    void copyVecUp(const Vec3 &vert, Vec3 &ans) const;
 };
 
 

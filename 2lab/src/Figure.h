@@ -6,9 +6,11 @@
 
 #include <SFML/Graphics/Glsl.hpp>
 
+#include "Polygon.h"
+
 class Figure {
 public:
-  virtual std::vector<sf::Glsl::Vec4> vertexes() = 0;
+    virtual std::vector<Polygon> polygons() = 0;
 };
 
 #endif //INC_2LAB__FIGURE_H

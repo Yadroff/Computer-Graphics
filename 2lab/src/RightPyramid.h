@@ -4,9 +4,9 @@
 #include "Figure.h"
 
 /*!
- * Класс n-угольной правильной пирамиды (n >= 3)
+ * \brief Класс n-угольной правильной пирамиды (n >= 3)
  *
- * Содержит в себе координаты точек в нормированной системе координат,
+ * Содержит в себе координаты точек в нормированной системе координат,\n
  * представляющих вершины правильного n-угольника и одну ортогональную вершину пирамиды
  */
 class RightPyramid : public Figure {
@@ -19,9 +19,9 @@ private:
     int n_;
     int radius_;
     int height_;
-    std::vector<sf::Glsl::Vec3> vertexes_;
+    std::vector<Math::Vec3> vertexes_;
 
-    void copyVec(const sf::Glsl::Vec3 &vert, sf::Glsl::Vec3 &ans) const;
+    void copyVec(const Math::Vec3 &vert, Math::Vec3 &ans) const;
 };
 
 #endif //INC_2LAB__RIGHTPYRAMID_H

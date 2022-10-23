@@ -1,5 +1,11 @@
 #include "Object.h"
 
-Object::Object(const Glsl::Vec3 &coords, const Glsl::Vec3 &scale, const Glsl::Vec3 &rotate,
-               std::shared_ptr<Figure> &model) :
-        cords_(coords), model_(model), scale_(scale), rotate_(rotate) {}
+Object::Object(Mat4 &modelMatrix, std::shared_ptr<Figure> &model) : model_(model), modelMatrix_(modelMatrix) {}
+
+Mat4 Object::modelMatrix() {
+    return modelMatrix_;
+}
+
+const std::shared_ptr<Figure> &Object::model() const {
+    return model_;
+}

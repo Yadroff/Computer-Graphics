@@ -10,6 +10,9 @@ set(CLASSES
         Math.cpp Math.h
         Figure.h
         RightTruncatedPyramid.cpp RightTruncatedPyramid.h
-        Polygon.cpp Polygon.h)
+        Polygon.cpp Polygon.h
+        Observer.cpp Observer.h
+        Matrix.h
+        Vector.h)
 add_executable(2lab main.cpp ${CLASSES})
 target_link_libraries(2lab sfml-graphics sfml-system)

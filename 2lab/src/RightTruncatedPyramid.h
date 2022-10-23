@@ -3,8 +3,12 @@
 
 #include "Figure.h"
 
-using namespace sf::Glsl;
-
+/*!
+ * \breif Класс правильной усеченной пирамиды
+ *
+ * В качестве параметров усеченная пирамида имеет количество вершин, радиус окружностей, описанной вокруг оснований,
+ * высоту верхнего основания
+ */
 class RightTruncatedPyramid : public Figure {
 public:
     RightTruncatedPyramid(const int &n, const int &radiusDown, const int &radiusUp, const int &h);
@@ -16,11 +20,11 @@ private:
     int radiusDown_;
     int radiusUp_;
     int height_;
-    std::vector<Vec3> vertexes_;
+    std::vector<Math::Vec3> vertexes_;
 
-    void copyVecDown(const Vec3 &vert, Vec3 &ans) const;
+    void copyVecDown(const Math::Vec3 &vert, Math::Vec3 &ans) const;
 
-    void copyVecUp(const Vec3 &vert, Vec3 &ans) const;
+    void copyVecUp(const Math::Vec3 &vert, Math::Vec3 &ans) const;
 };
 
 

@@ -3,26 +3,36 @@
 
 #include "Object.h"
 #include "Math.h"
+#include "Observer.h"
 
-using namespace sf::Glsl;
-
+/*!
+ * \breif Класс мира
+ *
+ * Содержит наблюдателя (камеру) и объекты
+ * Позволяет добавлять объекты, изменять значение камеры и тд
+ */
 class GlobalSystem {
 public:
-    explicit GlobalSystem(const Vec3 &camera);
+    GlobalSystem(const Math::Vec3 &camera, const float &FOV, const float &Nearest, const float &Farthest,
+                 const int &width, const int &height);
 
-    void addObject(const Vec3 &pos, std::shared_ptr<Figure> model);
+    void addObject(const Math::Vec3 &pos, std::shared_ptr<Figure> model);
 
-    void addObject(const Vec3 &pos, const Vec3 &scale, const Vec3 &rotate, std::shared_ptr<Figure> model);
+    void addObject(const Math::Vec3 &pos, const Math::Vec3 &scale, const Math::Vec3 &rotate, std::shared_ptr<Figure> model);
 
-    [[nodiscard]] const Vec3 &cameraCords() const;
+    void changeSize(const int &width, const int &height);
 
-    void setCameraCords(const Vec3 &CameraCords);
+    void setCameraCords(const Math::Vec3 &CameraCords);
 
-    Mat4 calculateLookAtMatrix();
+    void transform();
+
+    [[nodiscard]] Math::Vec3 cameraCords() const;
 
 private:
-    Vec3 cameraCords_;
+    Observer observer_;
     std::vector<Object> objects_;
+    int width_;
+    int height_;
 };
 
 #endif //INC_2LAB__GLOBALSYSTEM_H

@@ -10,8 +10,8 @@
  */
 class Observer {
 public:
-    explicit Observer(const Math::Vec3 &position, const float &FOV, const float &Nearest, const float &Farthest);
-
+    explicit Observer(const Math::Vec3 &position, const Math::Vec3 &target, const double &FOV, const double &Nearest,
+                      const double &Farthest);
 
     [[nodiscard]] Math::Vec3 position() const;
 
@@ -19,15 +19,14 @@ public:
 
     [[nodiscard]] Math::Mat4 lookAtMatrix(const Math::Vec3 &upVec) const;
 
-    [[nodiscard]] Math::Mat4 projectionMatrix(const float &aspect) const;
+    [[nodiscard]] Math::Mat4 projectionMatrix(const double &aspect) const;
 
 private:
-    Math::Vec3 position_;
-    float FOV_;
-    float Nearest_;
-    float Farthest_;
-    float a_;
-    float b_;
+    Math::Vec3 eye_;
+    double FOV_;
+    double Nearest_;
+    double Farthest_;
+    Math::Vec3 target_;
 };
 
 

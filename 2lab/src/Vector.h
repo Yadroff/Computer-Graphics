@@ -26,7 +26,11 @@ public:
 
     Vector(const Vector<T, L - 1> &v, const T &val);
 
+    explicit Vector(const T &val);
+
     Vector<T, L> operator*(const double &f) const;
+
+    T operator*(const Vector<T, L> &other) const;
 
     Vector<T, L> &operator=(const Vector<T, L> &v);
 
@@ -49,7 +53,7 @@ public:
     void normalize();
 
     template<typename TS, std::size_t &Ll>
-    friend std::ostream &operator<<(std::ostream &os, Vector<TS, Ll> &vec);
+    friend std::ostream &operator<<(std::ostream &os, const Vector<TS, Ll> &vec);
 
     T x() const;
 
@@ -164,7 +168,7 @@ void Vector<T, L>::normalize() {
 }
 
 template<typename TS, size_t &Ll>
-std::ostream &operator<<(std::ostream &os, Vector<TS, Ll> &vec) {
+std::ostream &operator<<(std::ostream &os, const Vector<TS, Ll> &vec) {
     os << "{";
     for (auto &data: vec.data_) {
         os << data << " ";
@@ -211,6 +215,22 @@ Vector<Type, Size> operator+(const Vector<Type, Size> &lhs, const Vector<Type, S
     Vector<Type, Size> res;
     for (std::size_t i = 0; i < Size; ++i) {
         res.data_[i] = lhs.data_[i] + rhs.data_[i];
+    }
+    return res;
+}
+
+template<typename T, std::size_t L>
+Vector<T, L>::Vector(const T &val) {
+    for (std::size_t i = 0; i < L; ++i) {
+        data_[i] = val;
+    }
+}
+
+template<typename T, std::size_t L>
+T Vector<T, L>::operator*(const Vector<T, L> &other) const {
+    T res = static_cast<T>(0);
+    for (std::size_t i = 0; i < L; ++i) {
+        res += data_[i] * other.data_[i];
     }
     return res;
 }

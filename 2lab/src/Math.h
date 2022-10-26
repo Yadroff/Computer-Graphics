@@ -25,6 +25,12 @@ namespace Math {
     Vec4 toVec4(const Vec3 &vec);
 
     Vec3 toVec3(const Vec2 &vec);
+
+    Mat4 rotate(const double &angle, const Vec3 &R);
+
+    Mat4 scale(const Vec3 &vec);
+
+    Mat4 shift(const Vec3 &vec);
 }
 
 #endif //INC_2LAB__MATH_H

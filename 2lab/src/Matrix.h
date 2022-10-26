@@ -12,6 +12,7 @@
  */
 template<typename T, std::size_t L>
 class Matrix {
+public:
     explicit Matrix();
 
     explicit Matrix(const std::array<std::array<T, L>, L> &array);
@@ -117,7 +118,7 @@ Matrix<T, L> Matrix<T, L>::operator*(const Matrix<T, L> &other) const {
     for (std::size_t i = 0; i < L; ++i) {
         for (std::size_t j = 0; j < L; ++j) {
             for (std::size_t k = 0; k < L; ++k) {
-                res[i][j] += data_[i][k] * other.data_[k][j];
+                res.data_[i][j] += this->data_[i][k] * other.data_[k][j];
             }
         }
     }
@@ -138,12 +139,13 @@ void Matrix<T, L>::operator*=(const Matrix<T, L> &other) {
 template<typename TT, std::size_t Size>
 std::ostream &operator<<(std::ostream &os, const Matrix<TT, Size> &matrix) {
     for (auto &row: matrix.data_) {
-        std::cout << "( ";
+        os << "( ";
         for (auto &el: row) {
-            std::cout << el << " ";
+            os << el << " ";
         }
-        std::cout << ")" << std::endl;
+        os << ")" << std::endl;
     }
+    return os;
 }
 
 

@@ -21,7 +21,7 @@ private:
     int height_;
     std::vector<Math::Vec3> vertexes_;
 
-    void copyVec(const Math::Vec3 &vert, Math::Vec3 &ans) const;
+    void copyVec(const Math::Vec3 &vert, Math::Vec4 &ans) const;
 };
 
 #endif //INC_2LAB__RIGHTPYRAMID_H

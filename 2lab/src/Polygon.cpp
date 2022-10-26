@@ -1,7 +1,7 @@
 #include <stdexcept>
 #include "Polygon.h"
 
-Polygon::Polygon(const Math::Vec3 &first, const Math::Vec3 &second, const Math::Vec3 &third) {
+Polygon::Polygon(const Math::Vec4 &first, const Math::Vec4 &second, const Math::Vec4 &third) {
     points_.reserve(3);
     points_.emplace_back(first);
     points_.emplace_back(second);
@@ -15,17 +15,7 @@ Polygon::Polygon(const Math::Vec3 &first, const Math::Vec3 &second, const Math::
  * @return std::vector<Math::Vec4> состоящий из вершин полигона
  */
 std::vector<Math::Vec4> Polygon::points() {
-    std::vector<Math::Vec4> ans;
-    ans.reserve(3);
-    double x, y, z, w;
-    for (auto &vec: points_) {
-        x = vec.x();
-        y = vec.y();
-        z = vec.z();
-        w = vec.magnitude();
-        ans.emplace_back(x, y, z, w);
-    }
-    return std::move(ans);
+    return points_;
 }
 
 /*!
@@ -40,14 +30,17 @@ void Polygon::sort() {
  * Функция вычисления нормали
  */
 void Polygon::calculateNormal() {
-    Math::Vec3 v1 = points_[1] - points_[0], v2 = points_[2] - points_[0];
-    normal_ = Math::crossProduct(v1, v2);
+    Math::Vec4 v1 = points_[1] - points_[0], v2 = points_[2] - points_[0];
+    Math::Vec3 left = {v1.x(), v1.y(), v1.z()};
+    Math::Vec3 right = {v2.x(), v2.y(), v2.z()};
+//    std::cout << left << std::endl << right << std::endl;
+    normal_ = Math::toVec4(Math::crossProduct(left, right));
 }
 
 /*!
  * @return возвращает вектор нормали
  */
-const Math::Vec3 &Polygon::normal() const {
+const Math::Vec4 &Polygon::normal() const {
     return normal_;
 }
 
@@ -61,21 +54,39 @@ std::vector<sf::Vertex> Polygon::toWindowCord(const int &width, const int &heigh
     std::vector<sf::Vertex> ans;
     ans.reserve(4);
     for (auto &point: points_) {
+        point.normalize();
         ans.emplace_back(
                 sf::Vector2f(static_cast<float>(width) / 2 * (1 + static_cast<float>(point.x())),
                              static_cast<float>(height) / 2 * (1 + static_cast<float>(point.y()))),
                 sf::Color::Black);
     }
     ans.emplace_back(ans[0]);
+    return ans;
 }
 
 /*!
  * @param i - индекс вершины
  * @return i-ую вершину полигона
  */
-Math::Vec3 &Polygon::operator[](const int &i) {
+Math::Vec4 &Polygon::operator[](const int &i) {
     if (i < 0 or i >= 3) {
         throw std::out_of_range("Index is " + std::to_string(i));
     }
     return points_[i];
+}
+
+void Polygon::transform(const Math::Mat4 &transform) {
+    for (auto &point: points_) {
+        point = transform * point;
+    }
+    calculateNormal();
+}
+
+std::ostream &operator<<(std::ostream &os, const Polygon &polygon) {
+    os << "POLYGON\n";
+    for (const auto &point: polygon.points_) {
+        os << point << std::endl;
+    }
+    os << "NORMAL\n" << polygon.normal_ << std::endl;
+    return os;
 }

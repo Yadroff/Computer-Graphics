@@ -22,9 +22,9 @@ private:
     int height_;
     std::vector<Math::Vec3> vertexes_;
 
-    void copyVecDown(const Math::Vec3 &vert, Math::Vec3 &ans) const;
+    void copyVecDown(const Math::Vec3 &vert, Math::Vec4 &ans) const;
 
-    void copyVecUp(const Math::Vec3 &vert, Math::Vec3 &ans) const;
+    void copyVecUp(const Math::Vec3 &vert, Math::Vec4 &ans) const;
 };
 
 

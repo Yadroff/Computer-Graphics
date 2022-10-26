@@ -1,9 +1,8 @@
 #include "Observer.h"
 
-Observer::Observer(const Math::Vec3 &position, const float &FOV, const float &Nearest, const float &Farthest) :
-        position_(position), FOV_(FOV), Nearest_(Nearest), Farthest_(Farthest) {
-    a_ = (Farthest_ + Nearest_) / (Farthest_ - Nearest_);
-    b_ = -2 * Farthest_ * Nearest_ / (Farthest_ - Nearest_);
+Observer::Observer(const Math::Vec3 &position, const Math::Vec3 &target, const double &FOV, const double &Nearest,
+                   const double &Farthest) :
+        eye_(position), FOV_(FOV), Nearest_(Nearest), Farthest_(Farthest), target_(target) {
 }
 
 /*!
@@ -12,34 +11,27 @@ Observer::Observer(const Math::Vec3 &position, const float &FOV, const float &Ne
  * @return матрицу преобразования координат из глобальной системы координат в систему координат наблюдателя
  */
 Math::Mat4 Observer::lookAtMatrix(const Math::Vec3 &vecUp) const {
-/*    Vec3 forward = Math::normalize(position_);
-    Vec3 left = Math::normalize(Math::crossProduct(vecUp, forward));
-    Vec3 up = Math::crossProduct(forward, left);
-
-    float matrix[16];
-    matrix[0] = left.x;
-    matrix[4] = left.y;
-    matrix[8] = left.z;
-    matrix[1] = up.x;
-    matrix[5] = up.y;
-    matrix[9] = up.z;
-    matrix[2] = forward.x;
-    matrix[6] = forward.y;
-    matrix[10] = forward.z;
-
-    // set translation part
-    matrix[12] = -Math::scalarProduct(left, position_);
-    matrix[13] = -Math::scalarProduct(up, position_);
-    matrix[14] = -Math::scalarProduct(forward, position_);
-    Mat4 mat(matrix);
-    return mat;*/
+    Math::Mat4 translation = {{1, 0, 0, -eye_.x()},
+                              {0, 1, 0, -eye_.y()},
+                              {0, 0, 1, -eye_.z()},
+                              {0, 0, 0, 1}};
+    Math::Vec3 forward = eye_ - target_;
+    forward.normalize();
+    Math::Vec3 left = Math::crossProduct(vecUp, forward);
+    left.normalize();
+    Math::Vec3 up = Math::crossProduct(forward, left);
+    Math::Mat4 rotation = {{left.x(),    left.y(),    left.z(),    0},
+                           {up.x(),      up.y(),      up.z(),      0},
+                           {forward.x(), forward.y(), forward.z(), 0},
+                           {0,           0,           0,           1}};
+    return rotation * translation;
 }
 
 /*!
  * @return вектор позиции наблюдателя в глобальной системе координат
  */
 Math::Vec3 Observer::position() const {
-    return position_;
+    return eye_;
 }
 
 /*!
@@ -47,7 +39,7 @@ Math::Vec3 Observer::position() const {
  * @param newPosition - вектор новой позиции
  */
 void Observer::setPosition(const Math::Vec3 &newPosition) {
-    position_ = newPosition;
+    eye_ = newPosition;
 }
 
 /*!
@@ -55,11 +47,13 @@ void Observer::setPosition(const Math::Vec3 &newPosition) {
  * @param aspect - соотношение сторон окна
  * @return матрицу видовой проекции
  */
-Math::Mat4 Observer::projectionMatrix(const float &aspect) const {
-  /*  float matrix[16] = {1 / aspect / tanf(FOV_ / 2), 0, 0, 0,
-                        0, 1 / tanf(FOV_ / 2), 0, 0,
-                        0, 0, a_, b_,
-                        0, 0, 1, 0
-    };
-    return Mat4(matrix);*/
+Math::Mat4 Observer::projectionMatrix(const double &aspect) const {
+    return {{1 / aspect / tan(FOV_ / 2), 0,                 0,                                                0},
+            {0,                          1 / tan(FOV_ / 2), 0,                                                0},
+            {0,                          0,                 -(Farthest_ + Nearest_) / (Farthest_ - Nearest_), -2 *
+                                                                                                              Farthest_ *
+                                                                                                              Nearest_ /
+                                                                                                              (Farthest_ -
+                                                                                                               Nearest_)},
+            {0,                          0,                 -1,                                               0}};
 }

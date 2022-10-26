@@ -6,8 +6,8 @@ RightTruncatedPyramid::RightTruncatedPyramid(const int &n, const int &radiusDown
     auto alpha = static_cast<double>(2 * M_PI / n_);
     for (int i = 0; i < n; ++i) {
         double x = cos(static_cast<double>(i) * alpha);
-        double y = sin(static_cast<double >(i) * alpha);
-        double z = 0;
+        double y = 0;
+        double z = sin(static_cast<double >(i) * alpha);
         vertexes_.emplace_back(x, y, z);
     }
 }
@@ -22,8 +22,8 @@ RightTruncatedPyramid::RightTruncatedPyramid(const int &n, const int &radiusDown
 std::vector<Polygon> RightTruncatedPyramid::polygons() {
     std::vector<Polygon> ans;
     ans.reserve(4 * n_);
-    Math::Vec3 centerDown(0.0, 0.0, 0.0), secondDown, thirdDown;
-    Math::Vec3 centerUp(0.0, 0.0, static_cast<double>(height_)), secondUp, thirdUp;
+    Math::Vec4 centerDown(0.0, 0.0, 0.0, 0.0), secondDown, thirdDown;
+    Math::Vec4 centerUp(0.0, static_cast<double>(height_), 0.0, 0.0), secondUp, thirdUp;
     copyVecDown(vertexes_[0], thirdDown);
     copyVecUp(vertexes_[0], thirdUp);
     for (int i = 1; i < n_; ++i) {
@@ -38,6 +38,7 @@ std::vector<Polygon> RightTruncatedPyramid::polygons() {
         ans.emplace_back(secondUp, secondDown, thirdDown);
         ans.emplace_back(secondUp, thirdUp, thirdDown);
     }
+    return ans;
 }
 
 /*!
@@ -45,10 +46,11 @@ std::vector<Polygon> RightTruncatedPyramid::polygons() {
  * @param vert - вершина модели в координатах из отрезка [0;1]
  * @param ans - вершина модели в соответствующем размере
  */
-void RightTruncatedPyramid::copyVecDown(const Math::Vec3 &vert, Math::Vec3 &ans) const {
-    ans[0] = vert.x() * static_cast<double>(radiusDown_);
-    ans[1] = vert.y() * static_cast<double>(radiusDown_);
+void RightTruncatedPyramid::copyVecDown(const Math::Vec3 &vert, Math::Vec4 &ans) const {
+    ans[1] = vert.x() * static_cast<double>(radiusDown_);
     ans[2] = 0;
+    ans[3] = vert.z() * static_cast<double>(radiusDown_);
+    ans[4] = 1;
 }
 
 /*!
@@ -56,8 +58,9 @@ void RightTruncatedPyramid::copyVecDown(const Math::Vec3 &vert, Math::Vec3 &ans)
  * @param vert - вершина модели в координатах из отрезка [0;1]
  * @param ans - вершина модели в соответствующем размере
  */
-void RightTruncatedPyramid::copyVecUp(const Math::Vec3 &vert, Math::Vec3 &ans) const {
+void RightTruncatedPyramid::copyVecUp(const Math::Vec3 &vert, Math::Vec4 &ans) const {
     ans[1] = vert.x() * static_cast<double>(radiusUp_);
-    ans[2] = vert.y() * static_cast<double>(radiusUp_);
-    ans[3] = static_cast<double >(height_);
+    ans[2] = static_cast<double>(height_);
+    ans[3] = vert.z() * static_cast<double>(radiusUp_);
+    ans[4] = 1;
 }

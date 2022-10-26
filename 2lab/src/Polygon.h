@@ -17,23 +17,26 @@
  */
 class Polygon {
 public:
-    Polygon(const Math::Vec3 &first, const Math::Vec3 &second, const Math::Vec3 &third);
+    Polygon(const Math::Vec4 &first, const Math::Vec4 &second, const Math::Vec4 &third);
 
     std::vector<Math::Vec4> points();
 
     std::vector<sf::Vertex> toWindowCord(const int &width, const int &height);
 
-    [[nodiscard]] const Math::Vec3 &normal() const;
+    [[nodiscard]] const Math::Vec4 &normal() const;
 
-    Math::Vec3 &operator[](const int &i);
+    Math::Vec4 &operator[](const int &i);
 
+    void transform(const Math::Mat4 &transform);
+
+    friend std::ostream &operator<<(std::ostream &os, const Polygon &polygon);
 private:
     void sort();
 
     void calculateNormal();
 
-    std::vector<Math::Vec3> points_;
-    Math::Vec3 normal_;
+    std::vector<Math::Vec4> points_;
+    Math::Vec4 normal_;
 };
 
 #endif //INC_2LAB_SRC_POLYGON_H

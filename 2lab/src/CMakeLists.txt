@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 find_package(SFML COMPONENTS system graphics REQUIRED)
 set(CLASSES
         RightPyramid.h RightPyramid.cpp
-        GlobalSystem.cpp GlobalSystem.h
+        Scene.cpp Scene.h
         Object.cpp Object.h
         Math.cpp Math.h
         Figure.h
